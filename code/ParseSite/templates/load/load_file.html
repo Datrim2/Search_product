@@ -1,0 +1,15 @@
+{% extends "base.html" %} 
+
+{% load crispy_forms_tags %} 
+
+{% block active_menu %}
+    <li class="nav-item"><a href="{% url 'load:history' %}" class="nav-link" aria-current="page">Поиск товаров</a></li>
+    <li class="nav-item"><a href="{% url 'load:file' %}" class="nav-link active">Загрузка файла</a></li>
+{% endblock %}
+
+{% block main_content %}
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %} {{ form|crispy }}
+    <input class="btn btn-primary" style="width: 200px;" type="submit" value="Отправить">
+</form>
+{% endblock %}

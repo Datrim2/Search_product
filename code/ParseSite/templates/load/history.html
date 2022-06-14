@@ -1,0 +1,40 @@
+{% extends "base.html" %} 
+
+{% load crispy_forms_tags %} 
+
+{% block active_menu %}
+    <li class="nav-item"><a href="{% url 'load:history' %}" class="nav-link active" aria-current="page">Поиск товаров</a></li>
+    <li class="nav-item"><a href="{% url 'load:file' %}" class="nav-link">Загрузка файла</a></li>
+{% endblock %}
+
+{% block main_content %}
+    <h1>Файлы:</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col">№</th>
+            <th scope="col">Файл</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col"> </th>
+            <th scope="col"> </th>
+            </tr>
+        </thead>
+    {% for document in object_list %}
+        <tbody>
+            <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td><a href="{% url 'load:document' document.pk %}">{{ document.doc_name }}</a></td>
+            <td>{{ document.user }}</td>
+            {% if document.status == 1 %}
+                <td><a href="{% url 'parse:wb' document.pk %}">Начать проверку</a></td>
+            {% else %}
+                <td><b> В обработке </b></td>
+            {% endif %}
+            <td><a href="{% url 'load:delete' document.pk %}">&#10060;</a></td>
+            </tr>
+        <tbody>
+    {% empty %}
+        <tr><td>нет загруженных файлов перейдите на страницу <a href="{% url 'load:file' %}">загрузки файлов</a></td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}

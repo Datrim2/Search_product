@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block active_menu %}
+    <li class="nav-item"><a href="{% url 'load:history' %}" class="nav-link active" aria-current="page">Поиск товаров</a></li>
+    <li class="nav-item"><a href="{% url 'load:file' %}" class="nav-link">Загрузка файла</a></li>
+{% endblock %}
+
+{% block main_content %} 
+<h1>Файл пройден</h1>
+<a href="{% url 'parse:wb_load' pk %}" type="button" class="btn btn-primary">Скачать результат</a>
+{% endblock %} 

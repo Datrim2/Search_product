@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block active_menu %}
+    <li class="nav-item"><a href="{% url 'load:history' %}" class="nav-link active" aria-current="page">Поиск товаров</a></li>
+    <li class="nav-item"><a href="{% url 'load:file' %}" class="nav-link">Загрузка файла</a></li>
+{% endblock %}
+
+{% block main_content %} 
+<p class="fw-lighter text-end">{{ kol_prov }} из {{all_data}}</p>
+<div class="row gx-5">
+    <div class="col-6">
+        <div style="  position: sticky;top: 0;">
+            <h1 class="text-center">Ситилинк</h1>
+            <div class="row shadow p-3 mb-5 bg-body rounded">
+                <div class="col-6">
+                    <h4><a href="{{ citilink_data.data.citilink_url }}">{{citilink_data.data.response_citilink.name}}</a></h3>
+                    <p>Цена:<b>{{citilink_data.data.response_citilink.offers.price}}</b></p>
+                </div>
+                <div class="col-6">
+                    <!-- <a href=""><img src="" class="img-fluid"></a> -->
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                        {% for key,link in citilink_data.data.images_citilink %}
+                            {% if key == '1' or key == 1 %}
+                                <div class="carousel-item active">
+                                    <img src="{{link}}" class="d-block text-center" alt="..." style="height: 150px;">
+                                </div>
+                            {% else %}
+                                <div class="carousel-item">
+                                    <img src="{{link}}" class="d-block text-center" alt="..." style="height: 150px;">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Предыдущий</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Следующий</span>
+                        </button>
+                      </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <h1 class="text-center">ВАЙЛДБЕРРИЗ</h1>
+        {% for product in product_elems%}
+        <div class="row shadow p-3 mb-5 bg-body rounded">
+            <div class="col-6">
+                <h4><a href="https://www.wildberries.ru/catalog/{{product.id}}/detail.aspx">{{product.name}}</a></h3>
+                <p>Продавец: {{ product.supplierName }}</p>
+                <p>Цена:<b>{{product.salePriceU}}</b></p>
+                {% if product.colors %}
+                    <p>Цвета:
+                        {% for color in product.colors%}
+                            {{color}} 
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                <a href="{% url 'parse:wb_save' product.pk_product product.id 1 %}" type="button" class="btn btn-primary">Выбрать</a>
+            </div>
+            <div class="col-6">
+                <div id="wb{{ product.id }}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                    {% for links in product.pics %}
+                        {% for key, link in links.items %}
+                            {% if key == '1' or key == 1 %}
+                                <div class="carousel-item active">
+                                    <img src="{{link}}" class="d-block text-center" alt="..." style="height: 150px;">
+                                </div>
+                            {% else %}
+                                <div class="carousel-item">
+                                    <img src="{{link}}" class="d-block text-center" alt="..." style="height: 150px;">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#wb{{ product.id }}"  data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Предыдущий</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#wb{{ product.id }}"  data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Следующий</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <a href="{% url 'parse:wb_save' tovar.product.pk 0 0 %}" type="button" class="btn btn-primary">Пропустить</a>
+    </div>
+</div>
+
+{% endblock %} 

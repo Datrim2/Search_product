@@ -1,0 +1,45 @@
+{% load static %} 
+<html> 
+    <head> 
+        <title>{% block title %}Главная страница{% endblock %}</title> 
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+        <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+        {% block extra_head %} 
+        {% endblock %} 
+    </head> 
+    <body> 
+        <div class="container">
+            {% block header %}
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <!-- {% comment %} <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg> {% endcomment %} -->
+                <span class="fs-4">Поиск товаров</span>
+            </a>
+    
+            <ul class="nav nav-pills">
+                {% block active_menu %}
+                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Поиск товаров</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Загрузка файла</a></li>
+                {% endblock %}
+            </ul>
+            </header>
+            {% endblock %}
+        </div>
+
+        <div class="container">
+            {% block main_content %} 
+            {% endblock %} 
+        </div> 
+
+        <div class="container">
+            {% block footer %}
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                    <span class="text-muted">Контактные данные:<br>Разработчик: roma-1998@mail.ru</span>
+                </div>
+            </footer>
+            {% endblock %}
+        </div>
+    </body> 
+</html> 

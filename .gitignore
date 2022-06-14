@@ -1,0 +1,11 @@
+/code/ParseSite/db.sqlite3
+/code/ParseSite/media
+/code/ParseSite/ParseSite/settings.py
+/code/ParseSite/ParseSite/__pycache__/
+*.log
+*.pot
+*.pyc
+
+/config/docker-env/.env
+/sock/*
+/logs/*

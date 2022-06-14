@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+
+  django:
+    container_name: django
+    build:
+      context: .
+      dockerfile: dockerfiles/docker-dev.Dockerfile
+    volumes:
+      - ./code:/code:z
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+
+  celery:
+    container_name: celery
+    build:
+      context: .
+      dockerfile: dockerfiles/docker-dev.Dockerfile
+    volumes:
+      - ./code:/code:z
+      - ./logs:/logs:z
+    command: celery -A ParseSite worker -l info -f /logs/celery.log
+    depends_on:
+      - rabbit
+      - django
+
+  rabbit:
+    container_name: rabbitmq
+    image: rabbitmq:3.9.15-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${USER}
+      - RABBITMQ_DEFAULT_PASS=${PASSWORD}
+      - RABBITMQ_PID_FILES=/var/lib/rabbitmq/mnesia/rabbitmq
+    ports:
+      - '15672:15672'
+
+  flower:
+    container_name: flower
+    image: mher/flower
+    command: celery flower --basic_auth=${USER}:${PASSWORD} --broker=amqp://${USER}:${PASSWORD}@rabbit:5672/ --broker_api=http://${USER}:${PASSWORD}@rabbit:15672/api/vhosts
+    environment:
+      CELERY_BROKER_URL: amqp://${USER}:${PASSWORD}@rabbit:5672/
+      CELERY_BROKER_API_URL: http://${USER}:${PASSWORD}@rabbit:15672/api/vhosts
+    ports:
+      - 5555:5555
+    depends_on:
+      - rabbit
+
+  splash:
+    container_name: splash
+    image: scrapinghub/splash
+    ports:
+      - 8050:8050
